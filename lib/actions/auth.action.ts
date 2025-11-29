@@ -109,7 +109,7 @@ export async function isAuthenticated() {
 export async function getInterviewsByUserId(userId: string): Promise<Interview[] | null> {
     const interviews = await db
         .collection('interviews')
-        .where('userId', '==','userId')
+        .where('userId', '==',userId)
         .orderBy('createdAt', 'desc').get();
 
     return interviews.docs.map((doc) =>({
@@ -125,7 +125,7 @@ export async function getLatestInterviews(params: GetLatestInterviewsParams): Pr
         .collection('interviews')
         .orderBy('createdAt', 'desc')
         .where('finalized', '==' , 'true')
-        .where('userId', '!=','userId')
+        .where('userId', '!=',userId)
         .limit(limit)
         .get();
 

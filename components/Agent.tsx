@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
-import { interviewer } from "@/constants";
 //import { createFeedback } from "@/lib/actions/general.action";
 
 enum CallStatus {
@@ -27,7 +26,6 @@ const Agent = ({
                    interviewId,
                    feedbackId,
                    type,
-                   questions,
                }: AgentProps) => {
     const router = useRouter();
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
@@ -117,33 +115,17 @@ const Agent = ({
 
     const handleCall = async () => {
         setCallStatus(CallStatus.CONNECTING);
-
-        if (type === "generate") {
-            await vapi.start(
-                process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
-                {
-                    variableValues :
-                        {
-                            username: userName,
-                            userid: userId
-                        },
+        await vapi.start(undefined,undefined,undefined,
+            process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!,
+            {
+                variableValues :
+                    {
+                        username: userName,
+                        userid: userId,
+                    },
                 }
             );
-        } else {
-            let formattedQuestions = "";
-            if (questions) {
-                formattedQuestions = questions
-                    .map((question) => `- ${question}`)
-                    .join("\n");
-            }
-
-            await vapi.start(interviewer, {
-                variableValues: {
-                    questions: formattedQuestions,
-                },
-            });
         }
-    };
 
     const handleDisconnect = () => {
         setCallStatus(CallStatus.FINISHED);

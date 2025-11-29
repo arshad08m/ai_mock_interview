@@ -15,7 +15,7 @@ const Page = async () => {
 
     const hasPastInterviews = userInterviews?.length > 0;
 
-    const hasUpcomingInterviews = latestInterviews?.length > 0;
+    const hasUpcomingInterviews = latestInterviews?.length! > 0;
 
     return (
         <>
@@ -44,7 +44,15 @@ const Page = async () => {
                     {
                         hasPastInterviews ?(
                             userInterviews?.map((interview) => (
-                                <InterviewCard {...interview} key = {interview.id}/>
+                                <InterviewCard
+                                    key={interview.id}
+                                    userId={user?.id}
+                                    interviewId={interview.id}
+                                    role={interview.role}
+                                    type={interview.type}
+                                    techstack={interview.techstack}
+                                    createdAt={interview.createdAt}
+                                />
                             ))) : (
                             <p>
                                 You Haven&apos;t taken any interviews yet
@@ -61,7 +69,15 @@ const Page = async () => {
                 <div className='interviews-section'>
                     {hasUpcomingInterviews ? (
                         latestInterviews?.map((interview) => (
-                            <InterviewCard {...interview} key={interview.id}/>
+                            <InterviewCard
+                                key={interview.id}
+                                userId={user?.id}
+                                interviewId={interview.id}
+                                role={interview.role}
+                                type={interview.type}
+                                techstack={interview.techstack}
+                                createdAt={interview.createdAt}
+                            />
                         ))) : (
                         <p>
                             There are no new Interviews available.
